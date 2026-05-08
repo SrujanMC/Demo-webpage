@@ -1,0 +1,1303 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Modern Business Template</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
+    <style>
+        /* --- CSS VARIABLES (THEMING) --- */
+        :root {
+            --primary: #4f46e5;
+            --primary-hover: #4338ca;
+            --bg-body: #f8fafc;
+            --bg-navbar: rgba(255, 255, 255, 0.8);
+            --bg-card: #ffffff;
+            --text-main: #0f172a;
+            --text-muted: #475569;
+            --border-color: #e2e8f0;
+            --glass-bg: rgba(255, 255, 255, 0.45);
+            --glass-border: rgba(255, 255, 255, 0.25);
+            --shadow: 0 10px 30px -5px rgba(0, 0, 0, 0.05);
+            --transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        [data-theme="dark"] {
+            --bg-body: #0f172a;
+            --bg-navbar: rgba(15, 23, 42, 0.8);
+            --bg-card: #1e293b;
+            --text-main: #f8fafc;
+            --text-muted: #94a3b8;
+            --border-color: #334155;
+            --glass-bg: rgba(15, 23, 42, 0.45);
+            --glass-border: rgba(255, 255, 255, 0.05);
+            --shadow: 0 10px 30px -5px rgba(0, 0, 0, 0.3);
+        }
+
+        /* --- BASE STYLES --- */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Plus Jakarta Sans', sans-serif;
+        }
+
+        html {
+            scroll-behavior: smooth;
+        }
+
+        body {
+            background-color: var(--bg-body);
+            color: var(--text-main);
+            transition: var(--transition);
+            overflow-x: hidden;
+            line-height: 1.6;
+        }
+
+        /* --- PRELOADER --- */
+        #preloader {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: var(--bg-body);
+            z-index: 9999;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            transition: opacity 0.5s ease, visibility 0.5s ease;
+        }
+
+        .spinner {
+            width: 50px;
+            height: 50px;
+            border: 5px solid var(--border-color);
+            border-top-color: var(--primary);
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+        }
+
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+
+        /* --- SMART NAVIGATION --- */
+        .navbar {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            padding: 1.25rem 5%;
+            background: var(--bg-navbar);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border-bottom: 1px solid var(--border-color);
+            z-index: 990;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            transition: var(--transition);
+        }
+
+        .navbar.scrolled {
+            padding: 0.8rem 5%;
+            box-shadow: var(--shadow);
+        }
+
+        .logo {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: var(--primary);
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 2rem;
+            list-style: none;
+            align-items: center;
+        }
+
+        .nav-links a {
+            text-decoration: none;
+            color: var(--text-muted);
+            font-weight: 500;
+            transition: var(--transition);
+            position: relative;
+        }
+
+        .nav-links a:hover, .nav-links a.active {
+            color: var(--primary);
+        }
+
+        .nav-links a::after {
+            content: '';
+            position: absolute;
+            bottom: -5px;
+            left: 0;
+            width: 0;
+            height: 2px;
+            background: var(--primary);
+            transition: var(--transition);
+        }
+
+        .nav-links a.active::after, .nav-links a:hover::after {
+            width: 100%;
+        }
+
+        .nav-actions {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        /* Controls & Selectors */
+        .theme-toggle, .voice-search-btn {
+            background: none;
+            border: 1px solid var(--border-color);
+            color: var(--text-main);
+            padding: 0.5rem;
+            border-radius: 50%;
+            cursor: pointer;
+            width: 40px;
+            height: 40px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: var(--transition);
+        }
+
+        .theme-toggle:hover, .voice-search-btn:hover {
+            background: var(--border-color);
+            transform: scale(1.05);
+        }
+
+        .voice-search-btn.listening {
+            background: #ef4444;
+            color: white;
+            animation: pulse 1.5s infinite;
+        }
+
+        @keyframes pulse {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.1); }
+            100% { transform: scale(1); }
+        }
+
+        .lang-picker {
+            background: var(--bg-card);
+            color: var(--text-main);
+            border: 1px solid var(--border-color);
+            padding: 0.5rem;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: 500;
+            outline: none;
+        }
+
+        .menu-toggle {
+            display: none;
+            font-size: 1.5rem;
+            cursor: pointer;
+            color: var(--text-main);
+        }
+
+        /* --- SCROLLYTELLING ANIMATION CLASSES --- */
+        .reveal {
+            position: relative;
+            opacity: 0;
+            transform: translateY(40px);
+            transition: opacity 0.8s ease, transform 0.8s ease;
+        }
+
+        .reveal.active {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        /* --- HERO SECTION --- */
+        .hero {
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            padding: 8rem 5% 4rem 5%;
+            background: linear-gradient(135deg, rgba(79, 70, 229, 0.05) 0%, rgba(0, 0, 0, 0) 100%);
+            position: relative;
+        }
+
+        .hero-container {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 4rem;
+            align-items: center;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .hero-badge {
+            display: inline-block;
+            padding: 0.5rem 1rem;
+            background: rgba(79, 70, 229, 0.1);
+            color: var(--primary);
+            border-radius: 100px;
+            font-size: 0.875rem;
+            font-weight: 600;
+            margin-bottom: 1.5rem;
+        }
+
+        .hero-title {
+            font-size: 3.5rem;
+            font-weight: 800;
+            line-height: 1.2;
+            margin-bottom: 1.5rem;
+        }
+
+        .hero-title span {
+            background: linear-gradient(to right, #4f46e5, #06b6d4);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .hero-desc {
+            font-size: 1.125rem;
+            color: var(--text-muted);
+            margin-bottom: 2.5rem;
+        }
+
+        .hero-buttons {
+            display: flex;
+            gap: 1rem;
+            flex-wrap: wrap;
+        }
+
+        .btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 0.75rem 1.75rem;
+            border-radius: 12px;
+            font-weight: 600;
+            text-decoration: none;
+            transition: var(--transition);
+            cursor: pointer;
+            border: none;
+        }
+
+        .btn-primary {
+            background: var(--primary);
+            color: white;
+        }
+
+        .btn-primary:hover {
+            background: var(--primary-hover);
+            transform: translateY(-2px);
+            box-shadow: 0 10px 20px rgba(79, 70, 229, 0.2);
+        }
+
+        .btn-secondary {
+            background: var(--bg-card);
+            color: var(--text-main);
+            border: 1px solid var(--border-color);
+        }
+
+        .btn-secondary:hover {
+            background: var(--border-color);
+            transform: translateY(-2px);
+        }
+
+        .hero-image-wrapper {
+            position: relative;
+            display: flex;
+            justify-content: center;
+        }
+
+        .hero-img {
+            width: 100%;
+            max-width: 450px;
+            border-radius: 24px;
+            box-shadow: var(--shadow);
+            transform: perspective(1000px) rotateY(-5deg) rotateX(5deg);
+            transition: var(--transition);
+        }
+
+        .hero-image-wrapper:hover .hero-img {
+            transform: perspective(1000px) rotateY(0deg) rotateX(0deg);
+        }
+
+        /* --- SECTION SETTINGS --- */
+        section {
+            padding: 6rem 5%;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .section-header {
+            text-align: center;
+            margin-bottom: 4rem;
+        }
+
+        .section-header h2 {
+            font-size: 2.5rem;
+            font-weight: 700;
+            margin-bottom: 1rem;
+        }
+
+        .section-header p {
+            color: var(--text-muted);
+            font-size: 1.1rem;
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        /* --- SERVICES (3D TILT CARDS) --- */
+        .services-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 2rem;
+        }
+
+        .card {
+            background: var(--bg-card);
+            border: 1px solid var(--border-color);
+            padding: 2.5rem 2rem;
+            border-radius: 20px;
+            box-shadow: var(--shadow);
+            transition: transform 0.1s ease, box-shadow 0.3s ease;
+            transform-style: preserve-3d;
+            perspective: 1000px;
+        }
+
+        .card:hover {
+            box-shadow: 0 20px 40px rgba(0,0,0,0.08);
+        }
+
+        .card-icon {
+            width: 60px;
+            height: 60px;
+            background: rgba(79, 70, 229, 0.1);
+            color: var(--primary);
+            border-radius: 16px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+            margin-bottom: 1.5rem;
+            transform: translateZ(30px);
+        }
+
+        .card h3 {
+            font-size: 1.35rem;
+            margin-bottom: 1rem;
+            transform: translateZ(25px);
+        }
+
+        .card p {
+            color: var(--text-muted);
+            transform: translateZ(20px);
+        }
+
+        /* --- PRODUCTS / MENU --- */
+        .products-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+            gap: 2.5rem;
+        }
+
+        .product-item {
+            background: var(--bg-card);
+            border: 1px solid var(--border-color);
+            border-radius: 20px;
+            overflow: hidden;
+            box-shadow: var(--shadow);
+            transition: var(--transition);
+        }
+
+        .product-item:hover {
+            transform: translateY(-5px);
+        }
+
+        .product-img-box {
+            height: 220px;
+            background: #e2e8f0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #94a3b8;
+            font-size: 3rem;
+        }
+
+        .product-info {
+            padding: 1.5rem;
+        }
+
+        .product-meta {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 0.5rem;
+        }
+
+        .product-title {
+            font-size: 1.25rem;
+            font-weight: 600;
+        }
+
+        .product-price {
+            font-weight: 700;
+            color: var(--primary);
+            font-size: 1.25rem;
+        }
+
+        .product-desc {
+            color: var(--text-muted);
+            font-size: 0.95rem;
+        }
+
+        /* --- TESTIMONIALS --- */
+        .reviews-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+        }
+
+        .review-card {
+            background: var(--bg-card);
+            border: 1px solid var(--border-color);
+            padding: 2rem;
+            border-radius: 20px;
+            box-shadow: var(--shadow);
+        }
+
+        .stars {
+            color: #f59e0b;
+            margin-bottom: 1rem;
+        }
+
+        .review-text {
+            color: var(--text-muted);
+            font-style: italic;
+            margin-bottom: 1.5rem;
+        }
+
+        .client-info {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .client-avatar {
+            width: 45px;
+            height: 45px;
+            border-radius: 50%;
+            background: var(--border-color);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 600;
+            color: var(--primary);
+        }
+
+        /* --- CONTACT & FOOTER --- */
+        .contact-container {
+            display: grid;
+            grid-template-columns: 1fr 1.2fr;
+            gap: 4rem;
+            background: var(--bg-card);
+            border: 1px solid var(--border-color);
+            border-radius: 24px;
+            padding: 3rem;
+            box-shadow: var(--shadow);
+        }
+
+        .contact-info h3 {
+            font-size: 1.75rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .contact-methods {
+            display: flex;
+            flex-direction: column;
+            gap: 1.5rem;
+            margin-bottom: 2rem;
+        }
+
+        .method-item {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            text-decoration: none;
+            color: var(--text-main);
+        }
+
+        .method-item i {
+            width: 40px;
+            height: 40px;
+            background: rgba(79, 70, 229, 0.1);
+            color: var(--primary);
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .map-placeholder {
+            width: 100%;
+            height: 200px;
+            background: var(--border-color);
+            border-radius: 16px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            color: var(--text-muted);
+            gap: 0.5rem;
+        }
+
+        .contact-form {
+            display: flex;
+            flex-direction: column;
+            gap: 1.25rem;
+        }
+
+        .form-group input, .form-group textarea {
+            width: 100%;
+            padding: 0.85rem 1rem;
+            border: 1px solid var(--border-color);
+            background: var(--bg-body);
+            color: var(--text-main);
+            border-radius: 10px;
+            outline: none;
+            font-size: 1rem;
+            transition: var(--transition);
+        }
+
+        .form-group input:focus, .form-group textarea:focus {
+            border-color: var(--primary);
+            box-shadow: 0 0 0 3px rgba(79, 70, 229, 0.15);
+        }
+
+        .footer-bottom {
+            margin-top: 4rem;
+            text-align: center;
+            padding-top: 2rem;
+            border-top: 1px solid var(--border-color);
+            color: var(--text-muted);
+            font-size: 0.9rem;
+        }
+
+        /* --- FAKE AI CHATBOT UI --- */
+        .chat-widget {
+            position: fixed;
+            bottom: 30px;
+            right: 30px;
+            z-index: 1000;
+        }
+
+        .chat-btn {
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            background: var(--primary);
+            color: white;
+            border: none;
+            cursor: pointer;
+            box-shadow: 0 10px 25px rgba(79, 70, 229, 0.4);
+            font-size: 1.5rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: var(--transition);
+        }
+
+        .chat-btn:hover {
+            transform: scale(1.05);
+        }
+
+        .chat-window {
+            position: absolute;
+            bottom: 80px;
+            right: 0;
+            width: 350px;
+            height: 450px;
+            background: var(--bg-card);
+            border: 1px solid var(--border-color);
+            border-radius: 20px;
+            box-shadow: var(--shadow);
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+            opacity: 0;
+            visibility: hidden;
+            transform: translateY(20px);
+            transition: var(--transition);
+        }
+
+        .chat-window.open {
+            opacity: 1;
+            visibility: visible;
+            transform: translateY(0);
+        }
+
+        .chat-header {
+            background: var(--primary);
+            color: white;
+            padding: 1rem;
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+        }
+
+        .chat-body {
+            flex: 1;
+            padding: 1rem;
+            overflow-y: auto;
+            display: flex;
+            flex-direction: column;
+            gap: 0.75rem;
+        }
+
+        .msg {
+            max-width: 80%;
+            padding: 0.75rem 1rem;
+            border-radius: 14px;
+            font-size: 0.925rem;
+        }
+
+        .msg.bot {
+            background: var(--border-color);
+            color: var(--text-main);
+            align-self: flex-start;
+            border-bottom-left-radius: 4px;
+        }
+
+        .msg.user {
+            background: var(--primary);
+            color: white;
+            align-self: flex-end;
+            border-bottom-right-radius: 4px;
+        }
+
+        .chat-options {
+            padding: 0.5rem 1rem;
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.5rem;
+            border-top: 1px solid var(--border-color);
+        }
+
+        .option-btn {
+            background: var(--bg-body);
+            border: 1px solid var(--border-color);
+            color: var(--text-main);
+            padding: 0.4rem 0.8rem;
+            border-radius: 20px;
+            font-size: 0.85rem;
+            cursor: pointer;
+            transition: var(--transition);
+        }
+
+        .option-btn:hover {
+            border-color: var(--primary);
+            color: var(--primary);
+        }
+
+        /* --- RESPONSIVE DESIGN --- */
+        @media (max-width: 968px) {
+            .navbar {
+                padding: 0.8rem 4%;
+            }
+            .hero-container {
+                grid-template-columns: 1fr;
+                text-align: center;
+                gap: 2rem;
+            }
+            .hero-image-wrapper {
+                order: -1;
+            }
+            .hero-buttons {
+                justify-content: center;
+            }
+            .contact-container {
+                grid-template-columns: 1fr;
+                gap: 2rem;
+            }
+            .menu-toggle {
+                display: block;
+                margin-left: 5px;
+            }
+            .nav-links {
+                position: fixed;
+                top: 70px;
+                left: -100%;
+                width: 100%;
+                height: calc(100vh - 70px);
+                background: var(--bg-card);
+                flex-direction: column;
+                padding: 2rem;
+                transition: var(--transition);
+                border-top: 1px solid var(--border-color);
+            }
+            .nav-links.open {
+                left: 0;
+            }
+            /* CHATBOT REPAIR */
+            .chat-widget {
+                right: 15px;
+                bottom: 15px;
+            }
+            .chat-window {
+                width: 280px;
+                right: 0;
+                bottom: 70px;
+            }
+            /* NAV ACTIONS REPAIR */
+            .nav-actions {
+                gap: 8px;
+            }
+            .logo {
+                font-size: 1.1rem;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <div id="preloader">
+        <div class="spinner"></div>
+    </div>
+
+    <nav class="navbar">
+        <a href="#" class="logo">
+            <i class="fa-solid fa-bolt"></i> BusinessName
+        </a>
+        <ul class="nav-links" id="navLinks">
+            <li><a href="#home" class="nav-item active" data-i18n="nav-home">Home</a></li>
+            <li><a href="#services" class="nav-item" data-i18n="nav-services">Services</a></li>
+            <li><a href="#products" class="nav-item" data-i18n="nav-products">Products</a></li>
+            <li><a href="#reviews" class="nav-item" data-i18n="nav-reviews">Reviews</a></li>
+            <li><a href="#contact" class="nav-item" data-i18n="nav-contact">Contact</a></li>
+        </ul>
+        <div class="nav-actions">
+            <button class="voice-search-btn" id="voiceBtn" title="Voice Search">
+                <i class="fa-solid fa-microphone"></i>
+            </button>
+            <button class="theme-toggle" id="themeToggle" title="Toggle Theme">
+                <i class="fa-solid fa-moon"></i>
+            </button>
+            <select class="lang-picker" id="langPicker">
+                <option value="en">EN</option>
+                <option value="hi">HI</option>
+                <option value="kn">KN</option>
+            </select>
+            <i class="fa-solid fa-bars menu-toggle" id="menuToggle"></i>
+        </div>
+    </nav>
+
+    <section class="hero" id="home">
+        <div class="hero-container">
+            <div class="reveal">
+                <div class="hero-badge" id="personalWelcome">Welcome</div>
+                <h1 class="hero-title"><span data-i18n="hero-span">Transform Your</span><br><span data-i18n="hero-span-2">Local Business</span></h1>
+                <p class="hero-desc" data-i18n="hero-desc">Give your brand a premium web presence. Lightweight, lightning fast, and fine-tuned to pull conversions out of local clients automatically.</p>
+                <div class="hero-buttons">
+                    <a href="#contact" class="btn btn-primary" data-i18n="hero-cta-1">Get Started <i class="fa-solid fa-arrow-right"></i></a>
+                    <a href="#services" class="btn btn-secondary" data-i18n="hero-cta-2">Learn More</a>
+                </div>
+            </div>
+            <div class="hero-image-wrapper reveal">
+                <div class="hero-img" style="background: linear-gradient(135deg, #4f46e5, #06b6d4); width: 100%; min-height: 350px; border-radius: 24px; display:flex; align-items:center; justify-content:center; color:white; font-size:4rem;"><i class="fa-solid fa-shop"></i></div>
+            </div>
+        </div>
+    </section>
+
+    <section id="services" class="reveal">
+        <div class="section-header">
+            <h2 data-i18n="services-title">Our Premium Offerings</h2>
+            <p data-i18n="services-subtitle">Engineered features built exclusively to expand visibility and capture consistent local sales operations smoothly.</p>
+        </div>
+        <div class="services-grid">
+            <div class="card tilt-card">
+                <div class="card-icon"><i class="fa-solid fa-rocket"></i></div>
+                <h3 data-i18n="s1-title">Ultra Fast Delivery</h3>
+                <p data-i18n="s1-desc">Instant offline availability tracking and local setup optimized metrics built straight out of the package box.</p>
+            </div>
+            <div class="card tilt-card">
+                <div class="card-icon"><i class="fa-solid fa-palette"></i></div>
+                <h3 data-i18n="s2-title">Modern Aesthetics</h3>
+                <p data-i18n="s2-desc">Clean premium layout patterns utilizing industry standard design schemas crafted carefully for your niche.</p>
+            </div>
+            <div class="card tilt-card">
+                <div class="card-icon"><i class="fa-solid fa-mobile-screen"></i></div>
+                <h3 data-i18n="s3-title">Fully Responsive</h3>
+                <p data-i18n="s3-desc">Engineered precisely to provide an outstanding native app feel across smartphones, tablets, and desktop interfaces.</p>
+            </div>
+        </div>
+    </section>
+
+    <section id="products" class="reveal">
+        <div class="section-header">
+            <h2 data-i18n="products-title">Featured Selections</h2>
+            <p data-i18n="products-subtitle">Explore a collection of our top signature items designed to provide maximum value for daily routines.</p>
+        </div>
+        <div class="products-grid">
+            <div class="product-item">
+                <div class="product-img-box"><i class="fa-solid fa-cube"></i></div>
+                <div class="product-info">
+                    <div class="product-meta">
+                        <span class="product-title" data-i18n="p1-name">Signature Package Alpha</span>
+                        <span class="product-price">$49</span>
+                    </div>
+                    <p class="product-desc" data-i18n="p1-desc">Our flagship core tier option configuration, ready to scale operations effortlessly for local entities.</p>
+                </div>
+            </div>
+            <div class="product-item">
+                <div class="product-img-box"><i class="fa-solid fa-cubes"></i></div>
+                <div class="product-info">
+                    <div class="product-meta">
+                        <span class="product-title" data-i18n="p2-name">Signature Package Beta</span>
+                        <span class="product-price">$99</span>
+                    </div>
+                    <p class="product-desc" data-i18n="p2-desc">Enhanced feature layout combinations configured to completely dominate competitive markets safely.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section id="reviews" class="reveal">
+        <div class="section-header">
+            <h2 data-i18n="reviews-title">Client Feedback</h2>
+            <p data-i18n="reviews-subtitle">See why local businesses trust our template layout system to secure a consistent web presence.</p>
+        </div>
+        <div class="reviews-grid">
+            <div class="review-card">
+                <div class="stars"><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i></div>
+                <p class="review-text" data-i18n="r1-text">"This layout structure completely transformed our cafe operations storefront! Highly recommended setup approach."</p>
+                <div class="client-info">
+                    <div class="client-avatar">A</div>
+                    <div>
+                        <h4 style="font-size:1rem;">Alex Rivera</h4>
+                        <p style="font-size:0.85rem; color:var(--text-muted);" data-i18n="r1-owner">Cafe Owner</p>
+                    </div>
+                </div>
+            </div>
+            <div class="review-card">
+                <div class="stars"><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i></div>
+                <p class="review-text" data-i18n="r2-text">"The smooth interface architecture paired with immediate loading speeds completely blew our expectation levels clear away."</p>
+                <div class="client-info">
+                    <div class="client-avatar">M</div>
+                    <div>
+                        <h4 style="font-size:1rem;">Meera Nair</h4>
+                        <p style="font-size:0.85rem; color:var(--text-muted);" data-i18n="r2-owner">Boutique Manager</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section id="contact" class="reveal">
+        <div class="contact-container">
+            <div class="contact-info">
+                <h3 data-i18n="contact-heading">Connect With Us</h3>
+                <div class="contact-methods">
+                    <a href="https://wa.me/1234567890" target="_blank" class="method-item">
+                        <i class="fa-brands fa-whatsapp"></i>
+                        <div>
+                            <strong style="display:block;">WhatsApp Us</strong>
+                            <span style="color:var(--text-muted); font-size:0.9rem;">Chat instantly with team members</span>
+                        </div>
+                    </a>
+                    <a href="tel:+1234567890" class="method-item">
+                        <i class="fa-solid fa-phone"></i>
+                        <div>
+                            <strong style="display:block;">Call Directly</strong>
+                            <span style="color:var(--text-muted); font-size:0.9rem;">+1 (234) 567-890</span>
+                        </div>
+                    </a>
+                </div>
+
+                <div class="map-placeholder">
+                    <i class="fa-solid fa-location-dot" style="font-size: 2rem; color: var(--primary);"></i>
+                    <span style="font-weight: 600;" data-i18n="map-title">Main Street Headquarters, NY</span>
+                    <span style="font-size: 0.85rem;">[Replace with your active Google Maps iframe embed configuration]</span>
+                </div>
+            </div>
+
+            <form class="contact-form" onsubmit="event.preventDefault(); alert('Message sent successfully! (Demo Form Mode)');">
+                <div class="form-group">
+                    <input type="text" placeholder="Your Name" required>
+                </div>
+                <div class="form-group">
+                    <input type="email" placeholder="Email Address" required>
+                </div>
+                <div class="form-group">
+                    <textarea rows="5" placeholder="Tell us about your requirements..." required></textarea>
+                </div>
+                <button type="submit" class="btn btn-primary" style="justify-content:center;" data-i18n="form-submit">Send Message</button>
+            </form>
+        </div>
+
+        <div class="footer-bottom">
+            <p>&copy; 2026 Local Business Solutions Engine. All Rights Reserved.</p>
+            <p style="font-size:0.8rem; margin-top:0.5rem; opacity:0.7;" id="analyticsCounter">Total unique visits tracked here: 1</p>
+        </div>
+    </section>
+
+    <div class="chat-widget">
+        <button class="chat-btn" id="chatBtn"><i class="fa-solid fa-comments"></i></button>
+        <div class="chat-window" id="chatWindow">
+            <div class="chat-header">
+                <i class="fa-solid fa-robot"></i>
+                <div>
+                    <h4 style="font-size:0.95rem;">Smart Assistant</h4>
+                    <span style="font-size:0.75rem; opacity:0.9;">Online & ready to guide</span>
+                </div>
+            </div>
+            <div class="chat-body" id="chatBody">
+                <div class="msg bot">Hello there! How can I assist you with upgrading your local storefront operation profile space today?</div>
+            </div>
+            <div class="chat-options">
+                <button class="option-btn" onclick="handleBotOption('hours')">Operating Hours?</button>
+                <button class="option-btn" onclick="handleBotOption('pricing')">View Pricing Tiers?</button>
+                <button class="option-btn" onclick="handleBotOption('location')">Where are you located?</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        /* --- MULTI-LANGUAGE TRANSLATION MATRIX --- */
+        const translations = {
+            en: {
+                "nav-home": "Home", "nav-services": "Services", "nav-products": "Products", "nav-reviews": "Reviews", "nav-contact": "Contact",
+                "hero-span": "Transform Your", "hero-span-2": "Local Business", "hero-desc": "Give your brand a premium web presence. Lightweight, lightning fast, and fine-tuned to pull conversions out of local clients automatically.",
+                "hero-cta-1": "Get Started", "hero-cta-2": "Learn More", "services-title": "Our Premium Offerings", "services-subtitle": "Engineered features built exclusively to expand visibility and capture consistent local sales operations smoothly.",
+                "s1-title": "Ultra Fast Delivery", "s1-desc": "Instant offline availability tracking and local setup optimized metrics built straight out of the package box.",
+                "s2-title": "Modern Aesthetics", "s2-desc": "Clean premium layout patterns utilizing industry standard design schemas crafted carefully for your niche.",
+                "s3-title": "Fully Responsive", "s3-desc": "Engineered precisely to provide an outstanding native app feel across smartphones, tablets, and desktop interfaces.",
+                "products-title": "Featured Selections", "products-subtitle": "Explore a collection of our top signature items designed to provide maximum value for daily routines.",
+                "p1-name": "Signature Package Alpha", "p1-desc": "Our flagship core tier option configuration, ready to scale operations effortlessly for local entities.",
+                "p2-name": "Signature Package Beta", "p2-desc": "Enhanced feature layout combinations configured to completely dominate competitive markets safely.",
+                "reviews-title": "Client Feedback", "reviews-subtitle": "See why local businesses trust our template layout system to secure a consistent web presence.",
+                "r1-text": "\"This layout structure completely transformed our cafe operations storefront! Highly recommended setup approach.\"", "r1-owner": "Cafe Owner",
+                "r2-text": "\"The smooth interface architecture paired with immediate loading speeds completely blew our expectation levels clear away.\"", "r2-owner": "Boutique Manager",
+                "contact-heading": "Connect With Us", "map-title": "Main Street Headquarters, NY", "form-submit": "Send Message"
+            },
+            hi: {
+                "nav-home": "होम", "nav-services": "सेवाएं", "nav-products": "उत्पाद", "nav-reviews": "समीक्षाएं", "nav-contact": "संपर्क",
+                "hero-span": "अपने स्थानीय व्यवसाय", "hero-span-2": "को बदलें", "hero-desc": "अपने ब्रांड को एक प्रीमियम वेब उपस्थिति दें। हल्का, तेज़ और स्थानीय ग्राहकों से रूपांतरण प्राप्त करने के लिए अनुकूलित।",
+                "hero-cta-1": "शुरू करें", "hero-cta-2": "अधिक जानें", "services-title": "हमारी प्रीमियम सेवाएं", "services-subtitle": "दृश्यता बढ़ाने और स्थानीय बिक्री को सुचारू रूप से कैप्चर करने के लिए विशेष रूप से निर्मित सुविधाएं।",
+                "s1-title": "अति तीव्र वितरण", "s1-desc": "तत्काल ऑफ़लाइन उपलब्धता ट्रैकिंग और स्थानीय सेटअप अनुकूलित मेट्रिक्स सीधे पैकेज से बाहर।",
+                "s2-title": "आधुनिक सौंदर्यशास्त्र", "s2-desc": "आपके आला के लिए सावधानीपूर्वक तैयार किए गए उद्योग मानक डिजाइन स्कीमा का उपयोग करके साफ प्रीमियम लेआउट पैटर्न।",
+                "s3-title": "पूर्णतः उत्तरदायी", "s3-desc": "स्मार्टफोन, टैबलेट और डेस्कटॉप इंटरफेस पर एक उत्कृष्ट नेटिव ऐप अनुभव प्रदान करने के लिए सटीक रूप से तैयार किया गया।",
+                "products-title": "विशेष चयन", "products-subtitle": "दैनिक दिनचर्या के लिए अधिकतम मूल्य प्रदान करने के लिए डिज़ाइन किए गए हमारे शीर्ष उत्पादों के संग्रह का अन्वेषण करें।",
+                "p1-name": "हस्ताक्षर पैकेज अल्फा", "p1-desc": "हमारा प्रमुख कोर टियर विकल्प कॉन्फ़िगरेशन, स्थानीय संस्थाओं के लिए संचालन को आसानी से स्केल करने के लिए तैयार है।",
+                "p2-name": "हस्ताक्षर पैकेज बीटा", "p2-desc": "प्रतिस्पर्धी बाजारों पर पूरी तरह से सुरक्षित रूप से हावी होने के लिए उन्नत सुविधा लेआउट संयोजन कॉन्फ़िगर किए गए हैं।",
+                "reviews-title": "ग्राहकों की प्रतिक्रिया", "reviews-subtitle": "देखें कि क्यों स्थानीय व्यवसाय एक सुसंगत वेब उपस्थिति सुरक्षित करने के लिए हमारे लेआउट सिस्टम पर भरोसा करते हैं।",
+                "r1-text": "\"इस लेआउट संरचना ने हमारे कैफे संचालन के अग्रभाग को पूरी तरह से बदल दिया! अत्यधिक अनुशंसित सेटअप दृष्टिकोण।\"", "r1-owner": "कैफे मालिक",
+                "r2-text": "\"तत्काल लोडिंग गति के साथ सहज इंटरफ़ेस आर्किटेक्चर ने हमारी अपेक्षाओं के स्तर को पूरी तरह से पार कर दिया।\"", "r2-owner": "बुटीक प्रबंधक",
+                "contact-heading": "हमसे जुड़ें", "map-title": "मेन स्ट्रीट मुख्यालय, एनवाई", "form-submit": "संदेश भेजें"
+            },
+            kn: {
+                "nav-home": "ಮುಖಪುಟ", "nav-services": "ಸೇವೆಗಳು", "nav-products": "ಉತ್ಪನ್ನಗಳು", "nav-reviews": "ವಿಮರ್ಶೆಗಳು", "nav-contact": "ಸಂಪರ್ಕ",
+                "hero-span": "ನಿಮ್ಮ ಸ್ಥಳೀಯ ವ್ಯವಹಾರವನ್ನು", "hero-span-2": "ಬದಲಾಯಿಸಿ", "hero-desc": "ನಿಮ್ಮ ಬ್ರ್ಯಾಂಡ್‌ಗೆ ಪ್ರೀಮಿಯಂ ವೆಬ್ ಉಪಸ್ಥಿತಿಯನ್ನು ನೀಡಿ. ಹಗುರವಾದ, ಮಿಂಚಿನ ವೇಗದ ಮತ್ತು ಸ್ಥಳೀಯ ಗ್ರಾಹಕರಿಂದ ಪರಿವರ್ತನೆಗಳನ್ನು ಸ್ವಯಂಚಾಲಿತವಾಗಿ ಸೆಳೆಯಲು ಟ್ಯೂನ್ ಮಾಡಲಾಗಿದೆ.",
+                "hero-cta-1": "ಪ್ರಾರಂಭಿಸಿ", "hero-cta-2": "ಇನ್ನಷ್ಟು ತಿಳಿಯಿರಿ", "services-title": "ನಮ್ಮ ಪ್ರೀಮಿಯಂ ಕೊಡುಗೆಗಳು", "services-subtitle": "ಸ್ಥಳೀಯ ಮಾರಾಟದ ಕಾರ್ಯಾಚರಣೆಗಳನ್ನು ಸರಾಗವಾಗಿ ಸೆರೆಹಿಡಿಯಲು ಪ್ರತ್ಯೇಕವಾಗಿ ನಿರ್ಮಿಸಲಾದ ವೈಶಿಷ್ಟ್ಯಗಳು.",
+                "s1-title": "ಅಲ್ಟ್ರಾ ಫಾಸ್ಟ್ ಡೆಲಿವರಿ", "s1-desc": "ತತ್‌ಕ್ಷಣದ ಆಫ್‌ಲೈನ್ ಲಭ್ಯತೆಯ ಟ್ರ್ಯಾಕಿಂಗ್ ಮತ್ತು ಸ್ಥಳೀಯ ಸೆಟಪ್ ಆಪ್ಟಿಮೈಸ್ಡ್ ಮೆಟ್ರಿಕ್ಸ್ ಪ್ಯಾಕೇಜ್ ಬಾಕ್ಸ್‌ನಿಂದ ನೇರವಾಗಿ ನಿರ್ಮಿಸಲಾಗಿದೆ.",
+                "s2-title": "ಆಧುನಿಕ ಸೌಂದರ್ಯಶಾಸ್ತ್ರ", "s2-desc": "ನಿಮ್ಮ ಉದ್ಯಮಕ್ಕಾಗಿ ಎಚ್ಚರಿಕೆಯಿಂದ ರಚಿಸಲಾದ ಉದ್ಯಮದ ಗುಣಮಟ್ಟದ ವಿನ್ಯಾಸ ಸ್ಕೀಮಾಗಳನ್ನು ಬಳಸಿಕೊಂಡು ಸ್ವಚ್ಛ ಪ್ರೀಮಿಯಂ ಲೇಔಟ್ ಮಾದರಿಗಳು.",
+                "s3-title": "ಸಂಪೂರ್ಣವಾಗಿ ರೆಸ್ಪಾನ್ಸಿವ್", "s3-desc": "ಸ್ಮಾರ್ಟ್‌ಫೋನ್‌ಗಳು, ಟ್ಯಾಬ್ಲೆಟ್‌ಗಳು ಮತ್ತು ಡೆಸ್ಕ್‌ಟಾಪ್ ಇಂಟರ್‌ಫೇಸ್‌ಗಳಲ್ಲಿ ಅತ್ಯುತ್ತಮವಾದ ಸ್ಥಳೀಯ ಅಪ್ಲಿಕೇಶನ್ ಅನುಭವವನ್ನು ನೀಡಲು ನಿಖರವಾಗಿ ವಿನ್ಯಾಸಗೊಳಿಸಲಾಗಿದೆ.",
+                "products-title": "ವೈಶಿಷ್ಟ್ಯಗೊಳಿಸಿದ ಆಯ್ಕೆಗಳು", "products-subtitle": "ದೈನಂದಿನ ದಿನಚರಿಗಳಿಗೆ ಗರಿಷ್ಠ ಮೌಲ್ಯವನ್ನು ನೀಡಲು ವಿನ್ಯಾಸಗೊಳಿಸಲಾದ ನಮ್ಮ ಉನ್ನತ ಸಿಗ್ನೇಚರ್ ಐಟಂಗಳ ಸಂಗ್ರಹವನ್ನು ಅನ್ವೇಷಿಸಿ.",
+                "p1-name": "ಸಿಗ್ನೇಚರ್ ಪ್ಯಾಕೇಜ್ ಆಲ್ಫಾ", "p1-desc": "ನಮ್ಮ ಪ್ರಮುಖ ಕೋರ್ ಶ್ರೇಣಿಯ ಆಯ್ಕೆಯ ಕಾನ್ಫಿಗರೇಶನ್, ಸ್ಥಳೀಯ ಘಟಕಗಳಿಗೆ ಕಾರ್ಯಾಚರಣೆಗಳನ್ನು ಸಲೀಸಾಗಿ ಅಳೆಯಲು ಸಿದ್ಧವಾಗಿದೆ.",
+                "p2-name": "ಸಿಗ್ನೇಚರ್ ಪ್ಯಾಕೇಜ್ ಬೀಟಾ", "p2-desc": "ಸ್ಪರ್ಧಾತ್ಮಕ ಮಾರುಕಟ್ಟೆಗಳಲ್ಲಿ ಸಂಪೂರ್ಣವಾಗಿ ಸುರಕ್ಷಿತವಾಗಿ ಪ್ರಾಬಲ್ಯ ಸಾಧಿಸಲು ಸುಧಾರಿತ ವೈಶಿಷ್ಟ್ಯದ ಲೇಔಟ್ ಸಂಯೋಜನೆಗಳನ್ನು ಕಾನ್ಫಿಗರ್ ಮಾಡಲಾಗಿದೆ.",
+                "reviews-title": "ಗ್ರಾಹಕರ ಪ್ರತಿಕ್ರಿಯೆ", "reviews-subtitle": "ಸ್ಥಿರವಾದ ವೆಬ್ ಉಪಸ್ಥಿತಿಯನ್ನು ಭದ್ರಪಡಿಸಿಕೊಳ್ಳಲು ಸ್ಥಳೀಯ ವ್ಯಾಪಾರಗಳು ನಮ್ಮ ಲೇಔಟ್ ಸಿಸ್ಟಮ್ ಅನ್ನು ಏಕೆ ನಂಬುತ್ತವೆ ಎಂಬುದನ್ನು ನೋಡಿ.",
+                "r1-text": "\"ಈ ಲೇಔಟ್ ರಚನೆಯು ನಮ್ಮ ಕೆಫೆ ಕಾರ್ಯಾಚರಣೆಯ ಮುಂಭಾಗವನ್ನು ಸಂಪೂರ್ಣವಾಗಿ ಬದಲಾಯಿಸಿತು! ಹೆಚ್ಚು ಶಿಫಾರಸು ಮಾಡಲಾದ ಸೆಟಪ್ ವಿಧಾನ.\"", "r1-owner": "ಕೆಫೆ ಮಾಲೀಕರು",
+                "r2-text": "\"ತಕ್ಷಣದ ಲೋಡಿಂಗ್ ವೇಗದೊಂದಿಗೆ ಜೋಡಿಸಲಾದ ಸುಗಮ ಇಂಟರ್ಫೇಸ್ ಆರ್ಕಿಟೆಕ್ಚರ್ ನಮ್ಮ ನಿರೀಕ್ಷೆಯ ಮಟ್ಟವನ್ನು ಸಂಪೂರ್ಣವಾಗಿ ಮೀರಿದೆ.\"", "r2-owner": "ಬೊಟಿಕ್ ಮ್ಯಾನೇಜರ್",
+                "contact-heading": "ನಮ್ಮೊಂದಿಗೆ ಸಂಪರ್ಕ ಸಾಧಿಸಿ", "map-title": "ಮೇನ್ ಸ್ಟ್ರೀಟ್ ಪ್ರಧಾನ ಕಛೇರಿ, NY", "form-submit": "ಸಂದೇಶ ಕಳುಹಿಸಿ"
+            }
+        };
+
+        // UI Language Switch Engine Action
+        const langPicker = document.getElementById('langPicker');
+        langPicker.addEventListener('change', (e) => {
+            setLanguage(e.target.value);
+        });
+
+        function setLanguage(lang) {
+            document.querySelectorAll('[data-i18n]').forEach(element => {
+                const key = element.getAttribute('data-i18n');
+                if (translations[lang] && translations[lang][key]) {
+                    if(element.tagName === 'INPUT' || element.tagName === 'TEXTAREA') {
+                        element.placeholder = translations[lang][key];
+                    } else {
+                        element.innerHTML = translations[lang][key];
+                    }
+                }
+            });
+            langPicker.value = lang;
+            localStorage.setItem('preferred-lang', lang);
+        }
+
+        /* --- PRELOADER REMOVAL --- */
+        window.addEventListener('load', () => {
+            const preloader = document.getElementById('preloader');
+            preloader.style.opacity = '0';
+            setTimeout(() => preloader.style.display = 'none', 500);
+            
+            // Initialization steps
+            initAnalytics();
+            initPersonalization();
+            revealScrollItems();
+            
+            // Apply saved language preferences
+            const savedLang = localStorage.getItem('preferred-lang') || 'en';
+            setLanguage(savedLang);
+        });
+
+        /* --- DARK / LIGHT THEME TOGGLE --- */
+        const themeToggle = document.getElementById('themeToggle');
+        const icon = themeToggle.querySelector('i');
+
+        // Check local storage configuration state
+        if (localStorage.getItem('theme') === 'dark') {
+            document.documentElement.setAttribute('data-theme', 'dark');
+            icon.classList.replace('fa-moon', 'fa-sun');
+        }
+
+        themeToggle.addEventListener('click', () => {
+            let currentTheme = document.documentElement.getAttribute('data-theme');
+            if (currentTheme === 'dark') {
+                document.documentElement.removeAttribute('data-theme');
+                icon.classList.replace('fa-sun', 'fa-moon');
+                localStorage.setItem('theme', 'light');
+            } else {
+                document.documentElement.setAttribute('data-theme', 'dark');
+                icon.classList.replace('fa-moon', 'fa-sun');
+                localStorage.setItem('theme', 'dark');
+            }
+        });
+
+        /* --- MOBILE MENU INTERACTION --- */
+        const menuToggle = document.getElementById('menuToggle');
+        const navLinksElement = document.getElementById('navLinks');
+
+        menuToggle.addEventListener('click', () => {
+            navLinksElement.classList.toggle('open');
+            menuToggle.classList.toggle('fa-xmark');
+        });
+
+        // Close when clicking nav items link elements
+        document.querySelectorAll('.nav-links a').forEach(link => {
+            link.addEventListener('click', () => {
+                navLinksElement.classList.remove('open');
+                menuToggle.classList.remove('fa-xmark');
+            });
+        });
+
+        /* --- SMART NAVIGATION ACTIVE TARGET TRACKING --- */
+        const sections = document.querySelectorAll('section');
+        const navItems = document.querySelectorAll('.nav-item');
+
+        window.addEventListener('scroll', () => {
+            const navbar = document.querySelector('.navbar');
+            if (window.scrollY > 50) {
+                navbar.classList.add('scrolled');
+            } else {
+                navbar.classList.remove('scrolled');
+            }
+
+            // Scroll spy activation tracking loops
+            let currentActive = "";
+            sections.forEach(section => {
+                const sectionTop = section.offsetTop;
+                const sectionHeight = section.clientHeight;
+                if (window.scrollY >= (sectionTop - 200)) {
+                    currentActive = section.getAttribute('id');
+                }
+            });
+
+            navItems.forEach(item => {
+                item.classList.remove('active');
+                if (item.getAttribute('href').slice(1) === currentActive) {
+                    item.classList.add('active');
+                }
+            });
+
+            revealScrollItems();
+        });
+
+        /* --- SCROLLYTELLING REVEAL ENGINE --- */
+        function revealScrollItems() {
+            const reveals = document.querySelectorAll('.reveal');
+            reveals.forEach(item => {
+                const windowHeight = window.innerHeight;
+                const elementTop = item.getBoundingClientRect().top;
+                const elementVisible = 120;
+
+                if (elementTop < windowHeight - elementVisible) {
+                    item.classList.add('active');
+                }
+            });
+        }
+
+        /* --- 3D TILT EFFECT MOUSE INTERACTION HANDLING --- */
+        const tiltCards = document.querySelectorAll('.tilt-card');
+        tiltCards.forEach(card => {
+            card.addEventListener('mousemove', (e) => {
+                const rect = card.getBoundingClientRect();
+                const x = e.clientX - rect.left;
+                const y = e.clientY - rect.top;
+                
+                const xc = rect.width / 2;
+                const yc = rect.height / 2;
+                
+                const angleX = (yc - y) / 10;
+                const angleY = (x - xc) / 10;
+                
+                card.style.transform = `rotateX(${angleX}deg) rotateY(${angleY}deg) translateY(-5px)`;
+            });
+
+            card.addEventListener('mouseleave', () => {
+                card.style.transform = 'rotateX(0deg) rotateY(0deg) translateY(0px)';
+            });
+        });
+
+        /* --- PERSONALIZED WELCOME ENGINE WITH BROWSER GEOLOCATION --- */
+        function initPersonalization() {
+            const welcomeTextElement = document.getElementById('personalWelcome');
+            const hours = new Date().getHours();
+            let timeGreeting = "Welcome";
+
+            if (hours < 12) timeGreeting = "Good Morning ☀️";
+            else if (hours < 18) timeGreeting = "Good Afternoon 🌤️";
+            else timeGreeting = "Good Evening 🌙";
+
+            welcomeTextElement.innerText = timeGreeting;
+
+            // Attempt Reverse Location Extraction using open public safe API call mechanics safely
+            if (navigator.geolocation) {
+                navigator.geolocation.getCurrentPosition(position => {
+                    const lat = position.coords.latitude;
+                    const lon = position.coords.longitude;
+                    fetch(`https://api.bigdatacloud.net/data/reverse-geocode-client?latitude=${lat}&longitude=${lon}&localityLanguage=en`)
+                        .then(res => res.json())
+                        .then(data => {
+                            if(data.city || data.locality) {
+                                welcomeTextElement.innerText = `${timeGreeting} visitor from ${data.city || data.locality}!`;
+                            }
+                        }).catch(() => {/* Handle silently if blocked or offline */});
+                }, () => {/* Ignored silently if user denies access coordinate flags */});
+            }
+        }
+
+        /* --- ANALYTICS ENGINE COUNTER --- */
+        function initAnalytics() {
+            const counterElement = document.getElementById('analyticsCounter');
+            let visitCount = localStorage.getItem('unique_visit_count');
+            
+            if(!visitCount) {
+                visitCount = 1;
+            } else {
+                visitCount = parseInt(visitCount) + 1;
+            }
+            localStorage.setItem('unique_visit_count', visitCount);
+            counterElement.innerText = `Total unique visits tracked here: ${visitCount}`;
+        }
+
+        /* --- VOICE SEARCH CAPABILITY (WEB SPEECH API) --- */
+        const voiceBtn = document.getElementById('voiceBtn');
+        const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+
+        if (SpeechRecognition) {
+            const recognition = new SpeechRecognition();
+            recognition.continuous = false;
+            recognition.lang = 'en-US';
+
+            voiceBtn.addEventListener('click', () => {
+                if (voiceBtn.classList.contains('listening')) {
+                    recognition.stop();
+                } else {
+                    recognition.start();
+                }
+            });
+
+            recognition.onstart = () => {
+                voiceBtn.classList.add('listening');
+            };
+
+            recognition.onend = () => {
+                voiceBtn.classList.remove('listening');
+            };
+
+            recognition.onresult = (event) => {
+                const transcript = event.results[0][0].transcript.toLowerCase();
+                voiceBtn.classList.remove('listening');
+                
+                // Match navigation commands spoken natively
+                if(transcript.includes('home') || transcript.includes('मुख्य')) {
+                    document.getElementById('home').scrollIntoView();
+                } else if(transcript.includes('service') || transcript.includes('सेवा')) {
+                    document.getElementById('services').scrollIntoView();
+                } else if(transcript.includes('product') || transcript.includes('उत्पाद')) {
+                    document.getElementById('products').scrollIntoView();
+                } else if(transcript.includes('review') || transcript.includes('समीक्षा')) {
+                    document.getElementById('reviews').scrollIntoView();
+                } else if(transcript.includes('contact') || transcript.includes('संपर्क')) {
+                    document.getElementById('contact').scrollIntoView();
+                } else {
+                    alert(`Voice recognized: "${transcript}". Try saying 'Services' or 'Contact' to scroll.`);
+                }
+            };
+        } else {
+            voiceBtn.style.display = 'none'; // Hide gracefully if unsupported browser variant detected
+        }
+
+        /* --- FAKE AI CHATBOT UI MANAGEMENT --- */
+        const chatBtn = document.getElementById('chatBtn');
+        const chatWindow = document.getElementById('chatWindow');
+        const chatBody = document.getElementById('chatBody');
+
+        chatBtn.addEventListener('click', () => {
+            chatWindow.classList.toggle('open');
+        });
+
+        function handleBotOption(optionKey) {
+            let userMsgText = "";
+            let botReplyText = "";
+
+            switch(optionKey) {
+                case 'hours':
+                    userMsgText = "What are your operating hours?";
+                    botReplyText = "We are open Monday through Friday from 9:00 AM to 7:00 PM, and Saturdays from 10:00 AM to 4:00 PM. Closed on Sundays.";
+                    break;
+                case 'pricing':
+                    userMsgText = "Can I view your pricing options?";
+                    botReplyText = "Our core items range between $49 and $99 depending on chosen configuration patterns. Check the Featured Selections section for live parameters!";
+                    break;
+                case 'location':
+                    userMsgText = "Where are you located?";
+                    botReplyText = "Our central office headquarters space is stationed right on Main Street, NY. Check out the active placeholder map at our footer area context space!";
+                    break;
+            }
+
+            appendChatMessage(userMsgText, 'user');
+            
+            setTimeout(() => {
+                appendChatMessage(botReplyText, 'bot');
+            }, 600);
+        }
+
+        function appendChatMessage(text, sender) {
+            const msgNode = document.createElement('div');
+            msgNode.classList.add('msg', sender);
+            msgNode.innerText = text;
+            chatBody.appendChild(msgNode);
+            chatBody.scrollTop = chatBody.scrollHeight;
+        }
+    </script>
+</body>
+</html>
